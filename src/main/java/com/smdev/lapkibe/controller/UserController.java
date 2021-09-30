@@ -1,5 +1,6 @@
 package com.smdev.lapkibe.controller;
 
+import com.smdev.lapkibe.model.dto.ExceptionResponseWrapperDTO;
 import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.service.UserService;
 import io.swagger.annotations.Api;
@@ -30,7 +31,7 @@ public class UserController {
     @ApiOperation(value = "Register a new user with unique email")
     @ApiResponses({
             @ApiResponse(code = 200, message = "JWT on success", response = String.class),
-            @ApiResponse(code = 400, message = "Invalid data"),
+            @ApiResponse(code = 400, message = "Invalid data", response = ExceptionResponseWrapperDTO.class),
             @ApiResponse(code = 401, message = "Bad credentials")
     })
     @PostMapping
