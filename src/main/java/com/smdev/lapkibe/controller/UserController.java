@@ -34,7 +34,7 @@ public class UserController {
             @ApiResponse(code = 400, message = "Invalid data", response = ExceptionResponseWrapperDTO.class),
             @ApiResponse(code = 401, message = "Bad credentials")
     })
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity register(@Valid UserRegistrationDTO userRegistrationDTO){
         boolean isRegistered = userService.registerUser(userRegistrationDTO);
 
