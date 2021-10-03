@@ -2,6 +2,7 @@ package com.smdev.lapkibe.controller;
 
 import com.smdev.lapkibe.model.dto.ExceptionResponseWrapperDTO;
 import com.smdev.lapkibe.model.dto.JwtResponse;
+import com.smdev.lapkibe.model.dto.UserLoginDTO;
 import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.service.UserService;
 import io.swagger.annotations.Api;
@@ -37,9 +38,26 @@ public class UserController {
             @ApiResponse(code = 400, message = "Invalid data", response = ExceptionResponseWrapperDTO.class),
             @ApiResponse(code = 401, message = "Bad credentials")
     })
-    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(value = "/register", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity register(@Valid @RequestBody UserRegistrationDTO userRegistrationDTO){
         String jwt = userService.registerUser(userRegistrationDTO);
+
+        if(!jwt.isEmpty()){
+            return ResponseEntity.ok(new JwtResponse(jwt));
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
+    @ApiOperation(value = "Login as existing user")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "JWT on success", response = JwtResponse.class),
+            @ApiResponse(code = 400, message = "Invalid data", response = ExceptionResponseWrapperDTO.class),
+            @ApiResponse(code = 401, message = "Bad credentials")
+    })
+    @PostMapping(value = "/login", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity login(@Valid @RequestBody UserLoginDTO userLoginDTO){
+        String jwt = userService.loginUser(userLoginDTO);
 
         if(!jwt.isEmpty()){
             return ResponseEntity.ok(new JwtResponse(jwt));
