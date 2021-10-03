@@ -24,12 +24,22 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendMail(SendMailDTO sendMailDTO) {
+    public void sendContactUsMail(SendMailDTO sendMailDTO) {
+        sendMail(String.format("Contact (%s <%s> <%s>)",
+                    sendMailDTO.getFullName(),
+                    sendMailDTO.getEmail(),
+                    sendMailDTO.getNumber()),
+                sendMailDTO.getMessage(),
+                adminEmail);
+    }
+
+    @Override
+    public void sendMail(String subject, String message, String to){
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setFrom(senderEmail);
-        simpleMailMessage.setSubject(String.format("Contact (%s <%s> <%s>)", sendMailDTO.getFullName(), sendMailDTO.getEmail(), sendMailDTO.getNumber()));
-        simpleMailMessage.setText(sendMailDTO.getMessage());
-        simpleMailMessage.setTo(adminEmail);
+        simpleMailMessage.setSubject(subject);
+        simpleMailMessage.setText(message);
+        simpleMailMessage.setTo(to);
         javaMailSender.send(simpleMailMessage);
     }
 }

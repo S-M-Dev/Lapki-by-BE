@@ -32,7 +32,7 @@ public class MailController {
     @ApiOperation(value = "Send mail from 'Contact Us' from")
     @PostMapping(value = "/send", consumes = {MediaType.APPLICATION_JSON_VALUE})
     public void send(@Valid @RequestBody SendMailDTO sendMailDTO){
-        mailService.sendMail(sendMailDTO);
+        mailService.sendContactUsMail(sendMailDTO);
     }
 
 }
