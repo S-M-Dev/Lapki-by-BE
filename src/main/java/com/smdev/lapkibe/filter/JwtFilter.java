@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = request.getHeader("token");
         if(token != null && token.startsWith(jwtUtil.getPrefix())){
-            token = token.substring(token.length());
+            token = token.substring(jwtUtil.getPrefix().length());
             String email = jwtUtil.getEmail(token);
             Optional<UserEntity> userEntity = userRepository.findByEmail(email);
             if (userEntity.isPresent()) {
