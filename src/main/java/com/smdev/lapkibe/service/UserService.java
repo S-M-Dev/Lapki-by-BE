@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @Service
 public interface UserService {
-    boolean registerUser(UserRegistrationDTO userRegistrationDTO);
-    boolean loginUser(UserLoginDTO userLoginDTO);
+    String registerUser(UserRegistrationDTO userRegistrationDTO);
+    String loginUser(UserLoginDTO userLoginDTO);
     void authenticate(String email);
     Optional<UserEntity> getUserByEmail(String email);
 }

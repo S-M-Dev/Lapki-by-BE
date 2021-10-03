@@ -3,6 +3,7 @@ package com.smdev.lapkibe.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.function.Function;
 public class JWTUtil {
     private final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
 
+    @Getter
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.token.duration}")

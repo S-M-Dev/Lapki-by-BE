@@ -6,12 +6,14 @@ import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.model.entity.UserEntity;
 import com.smdev.lapkibe.repository.UserRepository;
 import com.smdev.lapkibe.service.UserService;
+import com.smdev.lapkibe.util.JWTUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,39 +26,41 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final JWTUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, JWTUtil jwtUtil, UserDetailsService userDetailsService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
     }
 
-    //Todo Change to JWT response
     @Override
-    public boolean loginUser(UserLoginDTO userLoginDTO) {
+    public String loginUser(UserLoginDTO userLoginDTO) {
         Optional<UserEntity> userEntityOptional = getUserByEmail(userLoginDTO.getEmail());
 
         if(userEntityOptional.isEmpty() || !userEntityOptional
                 .get()
                 .getPassword()
                 .equals(userLoginDTO.getPassword())){
-            return false;
+            return new String();
         }
 
         authenticate(userEntityOptional.get().getEmail());
-        return true;
+        return jwtUtil.generate(userDetailsService.loadUserByUsername(userEntityOptional.get().getEmail()));
     }
 
-    //Todo Change to JWT response
     @Override
-    public boolean registerUser(UserRegistrationDTO userRegistrationDTO) {
+    public String registerUser(UserRegistrationDTO userRegistrationDTO) {
         if(getUserByEmail(userRegistrationDTO.getEmail()).isPresent()){
-            return false;
+            return new String();
         }
 
         userRepository.save(userMapper.registrationToEntity(userRegistrationDTO));
         authenticate(userRegistrationDTO.getEmail());
-        return true;
+        return jwtUtil.generate(userDetailsService.loadUserByUsername(userRegistrationDTO.getEmail()));
     }
 
     @Override

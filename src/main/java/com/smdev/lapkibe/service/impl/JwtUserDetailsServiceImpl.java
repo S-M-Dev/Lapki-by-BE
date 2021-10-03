@@ -2,6 +2,7 @@ package com.smdev.lapkibe.service.impl;
 
 import com.smdev.lapkibe.model.dto.JwtUserDetails;
 import com.smdev.lapkibe.model.entity.UserEntity;
+import com.smdev.lapkibe.repository.UserRepository;
 import com.smdev.lapkibe.service.UserService;
 import com.smdev.lapkibe.util.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,16 @@ import java.util.Optional;
 @Service
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
     @Autowired
-    public JwtUserDetailsServiceImpl(UserService userService) {
-        this.userService = userService;
+    public JwtUserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<UserEntity> userEntityOptional = userService.getUserByEmail(s);
+        Optional<UserEntity> userEntityOptional = userRepository.findByEmail(s);
         UserEntity user = userEntityOptional.orElseThrow(() -> new UsernameNotFoundException(s));
         return new JwtUserDetails(user);
     }
