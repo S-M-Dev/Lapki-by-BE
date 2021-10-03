@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 public class SendMailDTO {
     @Size(min = 2, max = 40, message = "Invalid full name")
     private String fullName;
-    @Pattern(regexp = "\\+([0-9]){8,15}]", message = "Invalid number")
+    @Pattern(regexp = "(^\\+[0-9]{8,15}$)", message = "Invalid number")
     private String number;
     @Email(message = "Invalid email")
     private String email;

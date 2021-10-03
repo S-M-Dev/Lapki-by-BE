@@ -29,6 +29,7 @@ public class MailServiceImpl implements MailService {
         simpleMailMessage.setFrom(senderEmail);
         simpleMailMessage.setSubject(String.format("Contact (%s <%s> <%s>)", sendMailDTO.getFullName(), sendMailDTO.getEmail(), sendMailDTO.getNumber()));
         simpleMailMessage.setText(sendMailDTO.getMessage());
+        simpleMailMessage.setTo(adminEmail);
         javaMailSender.send(simpleMailMessage);
     }
 }
