@@ -16,11 +16,11 @@ import java.util.function.Function;
 public class JWTUtil {
     private final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS256;
 
-    @Getter
     @Value("${jwt.secret}")
     private String secret;
     @Value("${jwt.token.duration}")
     private int time;
+    @Getter
     @Value("${jwt.token.prefix}")
     private String prefix;
     
@@ -45,7 +45,7 @@ public class JWTUtil {
         return (!isExpired(token) && getClaim(token, Claims::getSubject).equals(userDetails.getUsername()));
     }
 
-    public String gerEmail(String token){
+    public String getEmail(String token){
         return getClaim(token, Claims::getSubject);
     }
 

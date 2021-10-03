@@ -11,12 +11,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,28 +28,38 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final JWTUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserMapper userMapper, JWTUtil jwtUtil, UserDetailsService userDetailsService) {
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper,
+                           JWTUtil jwtUtil,
+                           UserDetailsService userDetailsService,
+                           PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public String loginUser(UserLoginDTO userLoginDTO) {
         Optional<UserEntity> userEntityOptional = getUserByEmail(userLoginDTO.getEmail());
 
-        if(userEntityOptional.isEmpty() || !userEntityOptional
-                .get()
-                .getPassword()
-                .equals(userLoginDTO.getPassword())){
+        if(userEntityOptional.isEmpty()){
             return new String();
         }
 
-        authenticate(userEntityOptional.get().getEmail());
-        return jwtUtil.generate(userDetailsService.loadUserByUsername(userEntityOptional.get().getEmail()));
+        String password = userLoginDTO.getPassword();
+
+        if(!passwordEncoder.matches(password, userEntityOptional.get().getPassword())){
+            return new String();
+        }
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userEntityOptional.get().getEmail());
+        authenticate(userDetails);
+        return jwtUtil.generate(userDetails);
     }
 
     @Override
@@ -58,25 +68,29 @@ public class UserServiceImpl implements UserService {
             return new String();
         }
 
-        userRepository.save(userMapper.registrationToEntity(userRegistrationDTO));
-        authenticate(userRegistrationDTO.getEmail());
-        return jwtUtil.generate(userDetailsService.loadUserByUsername(userRegistrationDTO.getEmail()));
+        UserEntity userEntity = userMapper.registrationToEntity(userRegistrationDTO);
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        userRepository.save(userEntity);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userRegistrationDTO.getEmail());
+        authenticate(userDetails);
+        return jwtUtil.generate(userDetails);
     }
 
     @Override
-    public void authenticate(String email) {
-        Optional<UserEntity> userEntityOptional = getUserByEmail(email);
+    public void authenticate(UserDetails userDetails) {
+        Optional<UserEntity> userEntityOptional = getUserByEmail(userDetails.getUsername());
         if(userEntityOptional.isEmpty()){
-            LOGGER.error(String.format("Unable to authenticate user '%s'. User not found!", email));
+            LOGGER.error(String.format("Unable to authenticate user '%s'. User not found!", userDetails.getUsername()));
             return;
         }
         SecurityContextHolder
                 .getContext()
                 .setAuthentication(
                         new UsernamePasswordAuthenticationToken(
-                                email,
+                                userDetails.getUsername(),
                                 userEntityOptional.get().getPassword(),
-                                List.of(new SimpleGrantedAuthority(userEntityOptional.get().getRole().name()))
+                                userDetails.getAuthorities()
                                 )
                 );
     }
