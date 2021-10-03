@@ -2,6 +2,7 @@ package com.smdev.lapkibe.service.impl;
 
 import com.smdev.lapkibe.model.dto.SendMailDTO;
 import com.smdev.lapkibe.service.MailService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -15,6 +16,7 @@ public class MailServiceImpl implements MailService {
 
     @Value("${spring.mail.username}")
     private String senderEmail;
+    @Getter
     @Value("${mail.admin}")
     private String adminEmail;
 
