@@ -1,6 +1,7 @@
 package com.smdev.lapkibe.service.impl;
 
 import com.smdev.lapkibe.mapper.UserMapper;
+import com.smdev.lapkibe.model.dto.PasswordChangeDTO;
 import com.smdev.lapkibe.model.dto.UserLoginDTO;
 import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.model.entity.UserEntity;
@@ -93,6 +94,25 @@ public class UserServiceImpl implements UserService {
                                 userDetails.getAuthorities()
                                 )
                 );
+    }
+
+    @Override
+    public String changePassword(PasswordChangeDTO passwordChangeDTO) {
+        String newPassword = passwordEncoder.encode(passwordChangeDTO.getPassword());
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Optional<UserEntity> userEntity = getUserByEmail(email);
+
+        if(userEntity.isEmpty()){
+            return new String();
+        }
+
+        UserEntity user = userEntity.get();
+        user.setPassword(newPassword);
+        userRepository.save(user);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+        authenticate(userDetails);
+        return jwtUtil.generate(userDetails);
     }
 
     @Override
