@@ -25,6 +25,7 @@ public class SwaggerConfig {
                 .apiInfo(getApiInfo());
     }
 
+    @Bean
     public ApiInfo getApiInfo(){
         return new ApiInfoBuilder()
                 .description("API for Lapki.by website")

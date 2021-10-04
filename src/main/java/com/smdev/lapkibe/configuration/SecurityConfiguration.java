@@ -23,6 +23,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final JwtFilter jwtFilter;
 
+
+    private static final String[] AUTH_WHITELIST = {
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
     @Autowired
     public SecurityConfiguration(UserDetailsService userDetailsService, JwtFilter jwtFilter) {
         this.userDetailsService = userDetailsService;
@@ -41,21 +54,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.POST, "/api/user/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/mail/send").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/code/generate").permitAll()
+                .antMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-    }
-
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
-                "/configuration/security",
-                "/swagger-ui.html",
-                "/webjars/**");
     }
 
     @Bean
