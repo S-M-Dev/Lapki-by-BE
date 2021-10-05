@@ -49,11 +49,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().cors().disable().authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/api/user/register").permitAll()
-                    .antMatchers(HttpMethod.POST, "/api/user/login").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/mail/send").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/code/generate").permitAll()
+        http.csrf().disable().authorizeRequests()
+                    .antMatchers("/api/user/register").permitAll()
+                    .antMatchers("/api/user/login").permitAll()
+                .antMatchers("/api/mail/send").permitAll()
+                .antMatchers("/api/code/generate").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                     .anyRequest().authenticated()
                 .and()
