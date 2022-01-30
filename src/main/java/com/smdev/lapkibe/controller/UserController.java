@@ -77,4 +77,9 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserResponseDTO getCurrent(){
+        return userService.getCurrent();
+    }
 }
