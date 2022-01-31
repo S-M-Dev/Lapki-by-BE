@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @Api
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.PATCH, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "*", methods = {RequestMethod.POST, RequestMethod.PATCH, RequestMethod.OPTIONS, RequestMethod.GET})
 public class UserController {
 
     private final UserService userService;
