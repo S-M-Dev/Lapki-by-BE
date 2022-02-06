@@ -17,7 +17,7 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                sh 'sudo docker run -d -p 8080:8080 --name lapki lapki-be:latest'
+                sh 'sudo docker run -d -p 8081:8080 --name lapki lapki-be:latest'
             }
         }
         
