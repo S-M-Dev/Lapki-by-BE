@@ -4,6 +4,7 @@ import com.smdev.lapkibe.model.dto.PasswordChangeDTO;
 import com.smdev.lapkibe.model.dto.UserLoginDTO;
 import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.model.dto.UserResponseDTO;
+import com.smdev.lapkibe.model.dto.UserUpdateRequest;
 import com.smdev.lapkibe.model.entity.UserEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -18,4 +19,5 @@ public interface UserService {
     String changePassword(PasswordChangeDTO passwordChangeDTO);
     Optional<UserEntity> getUserByEmail(String email);
     UserResponseDTO getCurrent();
+    UserResponseDTO updateUser(final UserUpdateRequest userUpdateRequest);
 }

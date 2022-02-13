@@ -78,6 +78,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponseDTO> update(@Valid @RequestBody final UserUpdateRequest userUpdateRequest){
+        return ResponseEntity.ok(userService.updateUser(userUpdateRequest));
+    }
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public UserResponseDTO getCurrent(){
         return userService.getCurrent();

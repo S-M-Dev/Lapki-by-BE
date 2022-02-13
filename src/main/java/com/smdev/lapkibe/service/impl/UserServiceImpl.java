@@ -5,6 +5,7 @@ import com.smdev.lapkibe.model.dto.PasswordChangeDTO;
 import com.smdev.lapkibe.model.dto.UserLoginDTO;
 import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.model.dto.UserResponseDTO;
+import com.smdev.lapkibe.model.dto.UserUpdateRequest;
 import com.smdev.lapkibe.model.entity.UserEntity;
 import com.smdev.lapkibe.repository.UserRepository;
 import com.smdev.lapkibe.service.UserService;
@@ -127,6 +128,18 @@ public class UserServiceImpl implements UserService {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
+        return userMapper.toResponse(user);
+    }
+
+    @Override
+    public UserResponseDTO updateUser(final UserUpdateRequest userUpdateRequest) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user = userRepository.findByEmail(email).get();
+        user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
+        user.setEmail(userUpdateRequest.getEmail());
+        user.setFullName(userUpdateRequest.getFullName());
+        user.setPhoneNumber(userUpdateRequest.getPhoneNumber());
+        userRepository.save(user);
         return userMapper.toResponse(user);
     }
 }
