@@ -20,8 +20,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+
+import lombok.SneakyThrows;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -141,5 +144,20 @@ public class UserServiceImpl implements UserService {
         user.setPhoneNumber(userUpdateRequest.getPhoneNumber());
         userRepository.save(user);
         return userMapper.toResponse(user);
+    }
+
+    @Override
+    @SneakyThrows
+    public void updateImage(MultipartFile file) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user  = userRepository.findByEmail(email).get();
+        user.setImage(file.getBytes());
+        userRepository.save(user);
+    }
+
+    @Override
+    public byte[] getImage() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepository.findByEmail(email).get().getImage();
     }
 }

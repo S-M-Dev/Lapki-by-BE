@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 
 @Entity
 @NoArgsConstructor
@@ -20,7 +21,7 @@ public class UserEntity {
     private String phoneNumber;
     private String password;
     private UserRole role;
-
-    //TODO Add photoName and list of requests OneToMany
+    @Lob
+    private byte[] image;
 
 }

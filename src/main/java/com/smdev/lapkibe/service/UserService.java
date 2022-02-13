@@ -1,15 +1,17 @@
 package com.smdev.lapkibe.service;
 
+import java.util.Optional;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.smdev.lapkibe.model.dto.PasswordChangeDTO;
 import com.smdev.lapkibe.model.dto.UserLoginDTO;
 import com.smdev.lapkibe.model.dto.UserRegistrationDTO;
 import com.smdev.lapkibe.model.dto.UserResponseDTO;
 import com.smdev.lapkibe.model.dto.UserUpdateRequest;
 import com.smdev.lapkibe.model.entity.UserEntity;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public interface UserService {
@@ -20,4 +22,6 @@ public interface UserService {
     Optional<UserEntity> getUserByEmail(String email);
     UserResponseDTO getCurrent();
     UserResponseDTO updateUser(final UserUpdateRequest userUpdateRequest);
+    void updateImage(final MultipartFile file);
+    byte[] getImage();
 }
