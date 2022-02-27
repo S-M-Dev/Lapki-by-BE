@@ -10,11 +10,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.smdev.lapkibe.model.dto.PetDetailsResponse;
+import com.smdev.lapkibe.model.dto.PetRequestDTO;
 import com.smdev.lapkibe.model.dto.PetResponse;
 import com.smdev.lapkibe.service.PetService;
 
@@ -61,6 +64,11 @@ public class PetController {
         }
 
         return ResponseEntity.ok(response.get());
+    }
+
+    @PostMapping(value = "/request", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void createPetRequest(@RequestBody PetRequestDTO petRequestDTO){
+        petService.createRequest(petRequestDTO);
     }
 
 }
