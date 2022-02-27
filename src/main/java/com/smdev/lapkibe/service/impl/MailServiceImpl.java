@@ -32,7 +32,7 @@ public class MailServiceImpl implements MailService {
                     sendMailDTO.getEmail(),
                     sendMailDTO.getNumber()),
                 sendMailDTO.getMessage(),
-                adminEmail);
+                sendMailDTO.getEmail());
     }
 
     @Override
