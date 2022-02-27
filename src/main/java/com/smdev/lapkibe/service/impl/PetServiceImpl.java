@@ -127,4 +127,14 @@ public class PetServiceImpl implements PetService {
         petRequestEntity.setOwner(user);
         petRequestRepository.save(petRequestEntity);
     }
+
+    @Override
+    public List<PetResponse> getAllApproved() {
+        return petRequestRepository.findAll()
+                .stream()
+                .filter(r -> r.isApproved() && r.getType() == Type.GIVE)
+                .map(PetRequestEntity::getPetEntity)
+                .map(PetResponse::new)
+                .collect(Collectors.toList());
+    }
 }

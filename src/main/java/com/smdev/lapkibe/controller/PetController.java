@@ -101,6 +101,12 @@ public class PetController {
                 .body(image);
     }
 
+    @GetMapping(value = "/approved", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PetResponse> getAllApproved(){
+        return petService.getAllApproved();
+    }
+
+
     @PostMapping(value = "/take", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void take(@RequestParam Long id){
         petService.take(id);
