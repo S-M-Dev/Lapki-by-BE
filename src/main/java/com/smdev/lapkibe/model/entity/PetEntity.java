@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 
 import com.smdev.lapkibe.model.dto.PetRequestDTO;
@@ -29,6 +30,8 @@ public class PetEntity {
     private int age;
     @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true)
     private List<PetProperty> properties = new LinkedList<>();
+    @Lob
+    private byte[] image;
 
     public PetEntity(PetRequestDTO petRequestDTO){
         this.name = petRequestDTO.getName();

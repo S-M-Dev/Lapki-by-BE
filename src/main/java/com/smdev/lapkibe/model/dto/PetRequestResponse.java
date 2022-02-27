@@ -16,6 +16,7 @@ public class PetRequestResponse {
     private String email;
     private Map<String, String> properties;
     private Type type;
+    private Long petId;
 
     public PetRequestResponse(PetRequestEntity petRequestEntity){
         this.name = petRequestEntity.getPetEntity().getName();
@@ -24,6 +25,8 @@ public class PetRequestResponse {
         this.email = petRequestEntity.getOwner().getEmail();
         this.type = petRequestEntity.getType();
         this.properties = new HashMap<>();
+
+        this.petId = petRequestEntity.getPetEntity().getId();
 
         petRequestEntity
                 .getPetEntity()

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.smdev.lapkibe.model.dto.PetDetailsResponse;
 import com.smdev.lapkibe.model.dto.PetRequestDTO;
@@ -15,7 +16,9 @@ public interface PetService {
     List<PetResponse> getAllPets();
     List<PetDetailsResponse> getAllPetsDetails();
     Optional<PetDetailsResponse> getPetDetails(Long id);
-    void createRequest(PetRequestDTO petRequestDTO);
+    Long createRequest(PetRequestDTO petRequestDTO);
     List<PetRequestResponse> getAllPetRequest();
     List<PetRequestResponse> getAllForCurrentUser();
+    void updateImage(final MultipartFile file, Long id);
+    byte[] getImage(Long id);
 }

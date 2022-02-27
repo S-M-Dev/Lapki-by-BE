@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.smdev.lapkibe.model.dto.PetDetailsResponse;
 import com.smdev.lapkibe.model.dto.PetRequestDTO;
@@ -22,6 +23,8 @@ import com.smdev.lapkibe.repository.PetRequestRepository;
 import com.smdev.lapkibe.repository.UserRepository;
 import com.smdev.lapkibe.service.PetService;
 import com.smdev.lapkibe.service.UserService;
+
+import lombok.SneakyThrows;
 
 @Service
 public class PetServiceImpl implements PetService {
@@ -63,7 +66,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public void createRequest(PetRequestDTO petRequestDTO) {
+    public Long createRequest(PetRequestDTO petRequestDTO) {
         final String email = SecurityContextHolder.getContext().getAuthentication().getName();
         final UserEntity user = userRepository.findByEmail(email).get();
 
@@ -80,6 +83,7 @@ public class PetServiceImpl implements PetService {
 
         user.addRequest(petRequestEntity);
         userRepository.save(user);
+        return petRequestEntity.getId();
     }
 
     @Override
@@ -97,5 +101,18 @@ public class PetServiceImpl implements PetService {
                 .stream()
                 .filter(p -> p.getEmail().equals(email))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @SneakyThrows
+    public void updateImage(MultipartFile file, Long id) {
+        PetEntity petEntity = petRepository.findById(id).get();
+        petEntity.setImage(file.getBytes());
+        petRepository.save(petEntity);
+    }
+
+    @Override
+    public byte[] getImage(Long id) {
+        return petRepository.findById(id).get().getImage();
     }
 }
