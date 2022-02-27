@@ -98,6 +98,9 @@ public class UserController {
     @GetMapping(value = "/image", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity image(){
         byte[] image = userService.getImage();
+        if(image == null){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment")
                 .body(image);
