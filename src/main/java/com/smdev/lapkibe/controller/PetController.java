@@ -112,4 +112,14 @@ public class PetController {
         petService.take(id);
     }
 
+    @PostMapping(value = "/approve", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void approve(@RequestParam Long id){
+        petService.approve(id);
+    }
+
+    @PostMapping(value = "/decline", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void decline(@RequestParam Long id){
+        petService.decline(id);
+    }
+
 }

@@ -138,4 +138,52 @@ public class PetServiceImpl implements PetService {
                 .map(PetResponse::new)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public void approve(Long id) {
+        PetRequestEntity request = petRequestRepository.findById(id).get();
+        PetRequestEntity originalRequest = petRequestRepository.findAll()
+                .stream()
+                .filter(r -> r.getPetEntity().getId() == request.getPetEntity().getId())
+                .findAny()
+                .get();
+
+        if(request.getType() == Type.GIVE){
+            request.setApproved(true);
+            petRequestRepository.save(request);
+            return;
+        }
+
+
+        PetEntity petEntity = request.getPetEntity();
+        request.setOwner(null);
+        request.setPetEntity(null);
+        originalRequest.setOwner(null);
+        originalRequest.setPetEntity(null);
+        petRepository.delete(petEntity);
+        UserEntity owner = request.getOwner();
+        owner.removeRequest(request);
+        userRepository.save(owner);
+        petRequestRepository.delete(originalRequest);
+        petRequestRepository.delete(request);
+    }
+
+    @Override
+    public void decline(Long id) {
+        PetRequestEntity request = petRequestRepository.findById(id).get();
+
+        if(request.getType() == Type.TAKE){
+            petRequestRepository.delete(request);
+            return;
+        }
+
+        PetEntity petEntity = request.getPetEntity();
+        request.setPetEntity(null);
+        petRepository.delete(petEntity);
+        UserEntity owner = request.getOwner();
+        owner.removeRequest(request);
+        request.setOwner(null);
+        userRepository.save(owner);
+        petRequestRepository.delete(request);
+    }
 }
