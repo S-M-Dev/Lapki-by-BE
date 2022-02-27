@@ -1,6 +1,7 @@
 package com.smdev.lapkibe.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,10 @@ public class PetServiceImpl implements PetService {
                 .stream()
                 .map(PetDetailsResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<PetDetailsResponse> getPetDetails(Long id) {
+        return petRepository.findById(id).map(PetDetailsResponse::new);
     }
 }
