@@ -10,7 +10,7 @@ public class PetResponse {
     private String name;
     private String description;
     private String sex;
-    private String age;
+    private int age;
 
     public PetResponse(PetEntity petEntity){
         this.id = petEntity.getId();

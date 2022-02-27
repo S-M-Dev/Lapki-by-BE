@@ -20,4 +20,10 @@ public class PetRequestEntity {
     private PetEntity petEntity;
     @ManyToOne
     private UserEntity owner;
+    private Type type;
+
+    public enum Type{
+        TAKE, GIVE
+    }
+
 }

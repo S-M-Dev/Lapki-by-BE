@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.smdev.lapkibe.model.dto.PetDetailsResponse;
 import com.smdev.lapkibe.model.dto.PetRequestDTO;
+import com.smdev.lapkibe.model.dto.PetRequestResponse;
 import com.smdev.lapkibe.model.dto.PetResponse;
 
 @Service
@@ -15,4 +16,6 @@ public interface PetService {
     List<PetDetailsResponse> getAllPetsDetails();
     Optional<PetDetailsResponse> getPetDetails(Long id);
     void createRequest(PetRequestDTO petRequestDTO);
+    List<PetRequestResponse> getAllPetRequest();
+    List<PetRequestResponse> getAllForCurrentUser();
 }

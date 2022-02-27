@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.smdev.lapkibe.model.dto.PetDetailsResponse;
 import com.smdev.lapkibe.model.dto.PetRequestDTO;
+import com.smdev.lapkibe.model.dto.PetRequestResponse;
 import com.smdev.lapkibe.model.dto.PetResponse;
 import com.smdev.lapkibe.service.PetService;
 
@@ -69,6 +70,16 @@ public class PetController {
     @PostMapping(value = "/request", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createPetRequest(@RequestBody PetRequestDTO petRequestDTO){
         petService.createRequest(petRequestDTO);
+    }
+
+    @GetMapping(value = "/requests", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PetRequestResponse> getAllRequests(){
+        return petService.getAllPetRequest();
+    }
+
+    @GetMapping(value = "/own", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PetRequestResponse> getAllForCurrent(){
+        return petService.getAllForCurrentUser();
     }
 
 }

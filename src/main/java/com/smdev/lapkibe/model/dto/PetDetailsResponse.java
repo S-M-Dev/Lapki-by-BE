@@ -13,7 +13,7 @@ public class PetDetailsResponse {
     private String name;
     private String description;
     private String sex;
-    private String age;
+    private int age;
     private List<PropertyDTO> properties;
 
     public PetDetailsResponse(PetEntity petEntity){

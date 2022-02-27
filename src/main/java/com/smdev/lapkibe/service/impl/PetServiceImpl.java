@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.smdev.lapkibe.model.dto.PetDetailsResponse;
 import com.smdev.lapkibe.model.dto.PetRequestDTO;
+import com.smdev.lapkibe.model.dto.PetRequestResponse;
 import com.smdev.lapkibe.model.dto.PetResponse;
 import com.smdev.lapkibe.model.entity.PetEntity;
 import com.smdev.lapkibe.model.entity.PetRequestEntity;
@@ -74,9 +75,27 @@ public class PetServiceImpl implements PetService {
         petRequestEntity.setPetEntity(pet);
         petRequestEntity.setApproved(false);
         petRequestEntity.setOwner(user);
+        petRequestEntity.setType(petRequestDTO.getType());
         petRequestRepository.save(petRequestEntity);
 
         user.addRequest(petRequestEntity);
         userRepository.save(user);
+    }
+
+    @Override
+    public List<PetRequestResponse> getAllPetRequest() {
+        return petRequestRepository.findAll()
+                .stream()
+                .map(PetRequestResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PetRequestResponse> getAllForCurrentUser() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getAllPetRequest()
+                .stream()
+                .filter(p -> p.getEmail().equals(email))
+                .collect(Collectors.toList());
     }
 }
