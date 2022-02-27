@@ -21,4 +21,5 @@ public interface PetService {
     List<PetRequestResponse> getAllForCurrentUser();
     void updateImage(final MultipartFile file, Long id);
     byte[] getImage(Long id);
+    void take(Long id);
 }

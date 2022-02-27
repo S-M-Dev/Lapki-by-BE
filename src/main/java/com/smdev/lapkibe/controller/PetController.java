@@ -101,4 +101,9 @@ public class PetController {
                 .body(image);
     }
 
+    @PostMapping(value = "/take", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void take(@RequestParam Long id){
+        petService.take(id);
+    }
+
 }

@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,13 +15,13 @@ import com.smdev.lapkibe.model.dto.PetRequestResponse;
 import com.smdev.lapkibe.model.dto.PetResponse;
 import com.smdev.lapkibe.model.entity.PetEntity;
 import com.smdev.lapkibe.model.entity.PetRequestEntity;
+import com.smdev.lapkibe.model.entity.PetRequestEntity.Type;
 import com.smdev.lapkibe.model.entity.UserEntity;
 import com.smdev.lapkibe.repository.PetPropertyRepository;
 import com.smdev.lapkibe.repository.PetRepository;
 import com.smdev.lapkibe.repository.PetRequestRepository;
 import com.smdev.lapkibe.repository.UserRepository;
 import com.smdev.lapkibe.service.PetService;
-import com.smdev.lapkibe.service.UserService;
 
 import lombok.SneakyThrows;
 
@@ -114,5 +113,18 @@ public class PetServiceImpl implements PetService {
     @Override
     public byte[] getImage(Long id) {
         return petRepository.findById(id).get().getImage();
+    }
+
+    @Override
+    public void take(Long id) {
+        final String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        final UserEntity user = userRepository.findByEmail(email).get();
+
+        PetRequestEntity petRequestEntity = new PetRequestEntity();
+        petRequestEntity.setPetEntity(petRepository.getById(id));
+        petRequestEntity.setType(Type.TAKE);
+        petRequestEntity.setApproved(false);
+        petRequestEntity.setOwner(user);
+        petRequestRepository.save(petRequestEntity);
     }
 }
