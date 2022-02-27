@@ -77,7 +77,7 @@ public class PetServiceImpl implements PetService {
         petRequestEntity.setPetEntity(pet);
         petRequestEntity.setApproved(false);
         petRequestEntity.setOwner(user);
-        petRequestEntity.setType(petRequestDTO.getType());
+        petRequestEntity.setType(Type.GIVE);
         petRequestRepository.save(petRequestEntity);
 
         user.addRequest(petRequestEntity);
@@ -86,9 +86,10 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public List<PetRequestResponse> getAllPetRequest() {
+    public List<PetRequestResponse> getAllNotApprovedPetRequest() {
         return petRequestRepository.findAll()
                 .stream()
+                .filter(r -> !r.isApproved())
                 .map(PetRequestResponse::new)
                 .collect(Collectors.toList());
     }
@@ -96,7 +97,7 @@ public class PetServiceImpl implements PetService {
     @Override
     public List<PetRequestResponse> getAllForCurrentUser() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getAllPetRequest()
+        return getAllNotApprovedPetRequest()
                 .stream()
                 .filter(p -> p.getEmail().equals(email))
                 .collect(Collectors.toList());

@@ -12,6 +12,5 @@ public class PetRequestDTO {
     private String name;
     private int age;
     private String sex;
-    private Type type;
     private Map<String, String> properties = new HashMap<>();
 }

@@ -75,9 +75,9 @@ public class PetController {
         return petService.createRequest(petRequestDTO);
     }
 
-    @GetMapping(value = "/requests", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/waiting", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PetRequestResponse> getAllRequests(){
-        return petService.getAllPetRequest();
+        return petService.getAllNotApprovedPetRequest();
     }
 
     @GetMapping(value = "/own", produces = MediaType.APPLICATION_JSON_VALUE)

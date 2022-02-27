@@ -17,7 +17,7 @@ public interface PetService {
     List<PetDetailsResponse> getAllPetsDetails();
     Optional<PetDetailsResponse> getPetDetails(Long id);
     Long createRequest(PetRequestDTO petRequestDTO);
-    List<PetRequestResponse> getAllPetRequest();
+    List<PetRequestResponse> getAllNotApprovedPetRequest();
     List<PetRequestResponse> getAllForCurrentUser();
     void updateImage(final MultipartFile file, Long id);
     byte[] getImage(Long id);
