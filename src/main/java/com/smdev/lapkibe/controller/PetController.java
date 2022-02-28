@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponses;
 @Api("PetController")
 @RestController
 @RequestMapping("/api/pet")
-@CrossOrigin(origins = "*", methods = {RequestMethod.OPTIONS, RequestMethod.GET})
+@CrossOrigin(origins = "*", methods = {RequestMethod.OPTIONS, RequestMethod.GET, RequestMethod.POST})
 public class PetController {
 
     private final PetService petService;
