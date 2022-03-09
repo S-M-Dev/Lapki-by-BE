@@ -31,6 +31,6 @@ public class PetRequestResponse {
         petRequestEntity
                 .getPetEntity()
                 .getProperties()
-                .forEach(p -> properties.put(p.getKey(), p.getValue()));
+                .forEach(p -> properties.put(p.getPropKey(), p.getValue()));
     }
 }

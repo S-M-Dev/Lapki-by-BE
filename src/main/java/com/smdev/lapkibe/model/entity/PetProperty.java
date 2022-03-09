@@ -17,11 +17,11 @@ public class PetProperty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String key;
+    private String propKey;
     private String value;
 
     public PetProperty(Entry<String, String> entry){
-        this.key = entry.getKey();
+        this.propKey = entry.getKey();
         this.value = entry.getValue();
     }
 

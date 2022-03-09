@@ -10,7 +10,7 @@ public class PropertyDTO {
     private String value;
 
     public PropertyDTO(PetProperty petProperty){
-        this.key = petProperty.getKey();
+        this.key = petProperty.getPropKey();
         this.value = petProperty.getValue();
     }
 
