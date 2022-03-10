@@ -64,7 +64,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/code/validate").permitAll()
                 .antMatchers("/api/pet/allDetails").permitAll()
                 .antMatchers("/api/pet/all").permitAll()
-                .antMatchers("/api/pet/image").permitAll()
+                .antMatchers("/api/pet/image/**").permitAll()
                 .antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()
                 .and()
