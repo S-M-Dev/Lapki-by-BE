@@ -173,6 +173,8 @@ public class PetServiceImpl implements PetService {
         PetRequestEntity request = petRequestRepository.findById(id).get();
 
         if(request.getType() == Type.TAKE){
+            request.setPetEntity(null);
+            request.getOwner().removeRequest(request);
             petRequestRepository.delete(request);
             return;
         }
