@@ -151,18 +151,13 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public void approve(Long id) {
-        PetRequestEntity originalRequest = petRequestRepository.findAll()
-                .stream()
-                .filter(r -> !r.isApproved())
-                .filter(r -> r.getPetEntity().getId() == id)
-                .findAny()
-                .get();
+        PetRequestEntity request = petRequestRepository.getById(id);
 
-        originalRequest.setApproved(true);
+        request.setApproved(true);
 
-        petRequestRepository.save(originalRequest);
+        petRequestRepository.save(request);
 
-        if (originalRequest.getType() == Type.TAKE) {
+        if (request.getType() == Type.TAKE) {
             PetRequestEntity giveRequest =  petRequestRepository.findAll()
                     .stream()
                     .filter(r -> r.getType() == Type.GIVE)
@@ -176,7 +171,7 @@ public class PetServiceImpl implements PetService {
                     .stream()
                     .filter(r -> r.getType() == Type.TAKE)
                     .filter(r -> r.getPetEntity().getId() == id)
-                    .filter(r -> r.getId() != originalRequest.getId())
+                    .filter(r -> r.getId() != request.getId())
                     .collect(Collectors.toList());
 
             petRequestRepository.deleteAll(restTakeRequests);
@@ -185,12 +180,7 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public void decline(Long id) {
-        PetRequestEntity request = petRequestRepository.findAll()
-                .stream()
-                .filter(r -> !r.isApproved())
-                .filter(r -> r.getPetEntity().getId() == id)
-                .findAny()
-                .get();
+        PetRequestEntity request = petRequestRepository.getById(id);
 
         if(request.getType() == Type.TAKE){
             request.setPetEntity(null);

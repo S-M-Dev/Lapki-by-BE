@@ -10,6 +10,7 @@ import lombok.Data;
 
 @Data
 public class PetRequestResponse {
+    private long id;
     private String name;
     private String sex;
     private int age;
@@ -19,6 +20,7 @@ public class PetRequestResponse {
     private Long petId;
 
     public PetRequestResponse(PetRequestEntity petRequestEntity){
+        this.id = petRequestEntity.getId();
         this.name = petRequestEntity.getPetEntity().getName();
         this.sex = petRequestEntity.getPetEntity().getSex();
         this.age = petRequestEntity.getPetEntity().getAge();
