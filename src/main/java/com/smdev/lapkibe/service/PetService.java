@@ -22,6 +22,7 @@ public interface PetService {
     void updateImage(final MultipartFile file, Long id);
     byte[] getImage(Long id);
     void take(Long id);
+    List<PetResponse> getAllApprovedGiveRequests();
     List<PetResponse> getAllApproved();
     void approve(Long id);
     void decline(Long id);

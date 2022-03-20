@@ -23,7 +23,7 @@ public class PetRequestEntity {
     private Type type;
 
     public enum Type{
-        TAKE, GIVE
+        TAKE, GIVE, TAKEN
     }
 
 }

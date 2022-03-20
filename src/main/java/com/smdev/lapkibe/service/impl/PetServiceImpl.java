@@ -130,10 +130,20 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public List<PetResponse> getAllApproved() {
+    public List<PetResponse> getAllApprovedGiveRequests() {
         return petRequestRepository.findAll()
                 .stream()
                 .filter(r -> r.isApproved() && r.getType() == Type.GIVE)
+                .map(PetRequestEntity::getPetEntity)
+                .map(PetResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PetResponse> getAllApproved() {
+        return petRequestRepository.findAll()
+                .stream()
+                .filter(PetRequestEntity::isApproved)
                 .map(PetRequestEntity::getPetEntity)
                 .map(PetResponse::new)
                 .collect(Collectors.toList());
@@ -148,24 +158,21 @@ public class PetServiceImpl implements PetService {
                 .findAny()
                 .get();
 
-        if(request.getType() == Type.GIVE){
-            request.setApproved(true);
-            petRequestRepository.save(request);
-            return;
+        request.setApproved(true);
+
+        petRequestRepository.save(request);
+
+        if (request.getType() == Type.TAKE) {
+            PetEntity pet = request.getPetEntity();
+            PetRequestEntity giveRequest =  petRequestRepository.findAll()
+                    .stream()
+                    .filter(r -> r.getType() == Type.GIVE)
+                    .filter(r -> r.getPetEntity().getId() == pet.getId())
+                    .collect(Collectors.toList())
+                    .get(0);
+
+            petRequestRepository.delete(giveRequest);
         }
-
-
-        PetEntity petEntity = request.getPetEntity();
-        request.setOwner(null);
-        request.setPetEntity(null);
-        originalRequest.setOwner(null);
-        originalRequest.setPetEntity(null);
-        petRepository.delete(petEntity);
-        UserEntity owner = request.getOwner();
-        owner.removeRequest(request);
-        userRepository.save(owner);
-        petRequestRepository.delete(originalRequest);
-        petRequestRepository.delete(request);
     }
 
     @Override

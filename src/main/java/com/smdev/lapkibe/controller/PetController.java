@@ -103,6 +103,11 @@ public class PetController {
 
     @GetMapping(value = "/approved", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PetResponse> getAllApproved(){
+        return petService.getAllApprovedGiveRequests();
+    }
+
+    @GetMapping(value = "/allApproved", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PetResponse> getAllTaken(){
         return petService.getAllApproved();
     }
 
