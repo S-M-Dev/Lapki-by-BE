@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.websocket.server.PathParam;
 
+import com.smdev.lapkibe.model.entity.PetRequestEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -107,10 +108,9 @@ public class PetController {
     }
 
     @GetMapping(value = "/allApproved", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PetResponse> getAllTaken(){
+    public List<PetRequestEntity> getAllTaken(){
         return petService.getAllApproved();
     }
-
 
     @PostMapping(value = "/take", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void take(@RequestParam Long id){

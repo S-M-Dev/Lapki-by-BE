@@ -3,6 +3,7 @@ package com.smdev.lapkibe.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.smdev.lapkibe.model.entity.PetRequestEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ public interface PetService {
     byte[] getImage(Long id);
     void take(Long id);
     List<PetResponse> getAllApprovedGiveRequests();
-    List<PetResponse> getAllApproved();
+    List<PetRequestEntity> getAllApproved();
     void approve(Long id);
     void decline(Long id);
 }

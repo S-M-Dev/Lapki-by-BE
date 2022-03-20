@@ -140,12 +140,10 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public List<PetResponse> getAllApproved() {
+    public List<PetRequestEntity> getAllApproved() {
         return petRequestRepository.findAll()
                 .stream()
                 .filter(PetRequestEntity::isApproved)
-                .map(PetRequestEntity::getPetEntity)
-                .map(PetResponse::new)
                 .collect(Collectors.toList());
     }
 
