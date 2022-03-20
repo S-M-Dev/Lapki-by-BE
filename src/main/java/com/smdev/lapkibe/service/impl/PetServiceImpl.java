@@ -151,27 +151,35 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public void approve(Long id) {
-        PetRequestEntity request = petRequestRepository.findById(id).get();
         PetRequestEntity originalRequest = petRequestRepository.findAll()
                 .stream()
-                .filter(r -> r.getPetEntity().getId() == request.getPetEntity().getId())
+                .filter(r -> !r.isApproved())
+                .filter(r -> r.getPetEntity().getId() == id)
                 .findAny()
                 .get();
 
-        request.setApproved(true);
+        originalRequest.setApproved(true);
 
-        petRequestRepository.save(request);
+        petRequestRepository.save(originalRequest);
 
-        if (request.getType() == Type.TAKE) {
-            PetEntity pet = request.getPetEntity();
+        if (originalRequest.getType() == Type.TAKE) {
             PetRequestEntity giveRequest =  petRequestRepository.findAll()
                     .stream()
                     .filter(r -> r.getType() == Type.GIVE)
-                    .filter(r -> r.getPetEntity().getId() == pet.getId())
-                    .collect(Collectors.toList())
-                    .get(0);
+                    .filter(r -> r.getPetEntity().getId() == id)
+                    .findAny()
+                    .get();
 
             petRequestRepository.delete(giveRequest);
+
+            List<PetRequestEntity> restTakeRequests = petRequestRepository.findAll()
+                    .stream()
+                    .filter(r -> r.getType() == Type.TAKE)
+                    .filter(r -> r.getPetEntity().getId() == id)
+                    .filter(r -> r.getId() != originalRequest.getId())
+                    .collect(Collectors.toList());
+
+            petRequestRepository.deleteAll(restTakeRequests);
         }
     }
 
