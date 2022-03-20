@@ -185,7 +185,12 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public void decline(Long id) {
-        PetRequestEntity request = petRequestRepository.findById(id).get();
+        PetRequestEntity request = petRequestRepository.findAll()
+                .stream()
+                .filter(r -> !r.isApproved())
+                .filter(r -> r.getPetEntity().getId() == id)
+                .findAny()
+                .get();
 
         if(request.getType() == Type.TAKE){
             request.setPetEntity(null);
