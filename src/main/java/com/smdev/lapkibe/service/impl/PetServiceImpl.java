@@ -160,7 +160,7 @@ public class PetServiceImpl implements PetService {
             PetRequestEntity giveRequest =  petRequestRepository.findAll()
                     .stream()
                     .filter(r -> r.getType() == Type.GIVE)
-                    .filter(r -> r.getPetEntity().getId() == id)
+                    .filter(r -> r.getPetEntity().getId() == request.getPetEntity().getId())
                     .findAny()
                     .get();
 
@@ -169,7 +169,7 @@ public class PetServiceImpl implements PetService {
             List<PetRequestEntity> restTakeRequests = petRequestRepository.findAll()
                     .stream()
                     .filter(r -> r.getType() == Type.TAKE)
-                    .filter(r -> r.getPetEntity().getId() == id)
+                    .filter(r -> r.getPetEntity().getId() == request.getPetEntity().getId())
                     .filter(r -> r.getId() != request.getId())
                     .collect(Collectors.toList());
 
