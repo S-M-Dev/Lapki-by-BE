@@ -108,7 +108,7 @@ public class PetController {
     }
 
     @GetMapping(value = "/allApproved", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PetRequestEntity> getAllTaken(){
+    public List<PetRequestResponse> getAllTaken(){
         return petService.getAllApproved();
     }
 

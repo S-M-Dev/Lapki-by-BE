@@ -24,7 +24,7 @@ public interface PetService {
     byte[] getImage(Long id);
     void take(Long id);
     List<PetResponse> getAllApprovedGiveRequests();
-    List<PetRequestEntity> getAllApproved();
+    List<PetRequestResponse> getAllApproved();
     void approve(Long id);
     void decline(Long id);
 }
