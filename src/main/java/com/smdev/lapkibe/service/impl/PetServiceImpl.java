@@ -82,7 +82,7 @@ public class PetServiceImpl implements PetService {
 
         user.addRequest(petRequestEntity);
         userRepository.save(user);
-        return petRequestEntity.getId();
+        return petRequestEntity.getPetEntity().getId();
     }
 
     @Override
